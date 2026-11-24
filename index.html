@@ -1,0 +1,2095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Govind Garden · Guest Care & Owner Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --bg-cream: #F6F5F0;
+      --surface: #FFFFFF;
+      --forest: #173F2D;
+      --forest-dark: #102D20;
+      --forest-light: #E8F1EC;
+      --gold: #B8872B;
+      --gold-bg: #FBF4E4;
+      --ink: #18231E;
+      --muted: #606F68;
+      --border: #E2E0D8;
+      --red-bg: #FDECEC;
+      --red-ink: #B42318;
+      --green-bg: #E6F4EC;
+      --green-ink: #137333;
+      --blue-bg: #E8F0FE;
+      --blue-ink: #1967D2;
+      --shadow: 0 2px 10px rgba(23, 63, 45, 0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-cream);
+      color: var(--ink);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP NAVBAR */
+    header.topbar {
+      background: var(--forest);
+      color: #fff;
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .topbar-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #23573F;
+      border: 1.5px solid rgba(255,255,255,0.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: #D9F2E4;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .brand-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .brand-text h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.15;
+    }
+    .brand-text span {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #A7CBB9;
+      font-weight: 600;
+    }
+
+    nav.nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: #D2E5DC;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.15s;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .nav-btn.active {
+      background: #286147;
+      color: #fff;
+      font-weight: 600;
+    }
+    .owner-pill {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* MAIN CONTAINER */
+    main {
+      max-width: 960px;
+      width: 100%;
+      margin: 22px auto 40px;
+      padding: 0 16px;
+      flex: 1;
+    }
+
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* HERO BANNER (Guest Portal) */
+    .hero-card {
+      background: linear-gradient(135deg, #163C2B 0%, #1F4E39 60%, #133324 100%);
+      color: #fff;
+      border-radius: 18px;
+      padding: 28px 26px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .hero-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: #C7E8D6;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .hero-badge img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-kicker {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #D4B475;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .hero-card h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(24px, 4vw, 32px);
+      line-height: 1.2;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    .hero-card p {
+      color: #D2E4DB;
+      font-size: 14px;
+      max-width: 620px;
+      margin-bottom: 18px;
+    }
+    .hero-points {
+      list-style: none;
+      display: grid;
+      gap: 7px;
+      font-size: 13px;
+      color: #E3EFE9;
+    }
+    .hero-points li { display: flex; align-items: center; gap: 8px; }
+
+    /* CARDS & FORMS */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+    }
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-size: 21px;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+    .section-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    /* MODE SWITCHER (Complaint vs Compliment) */
+    .type-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      background: var(--bg-cream);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 18px;
+    }
+    .type-btn {
+      border: none;
+      background: transparent;
+      padding: 10px 12px;
+      border-radius: 9px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .type-btn.active.complaint {
+      background: var(--forest);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(23,63,45,0.2);
+    }
+    .type-btn.active.compliment {
+      background: var(--gold);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(184,135,43,0.25);
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 620px) {
+      .form-grid-2 { grid-template-columns: 1fr; }
+    }
+
+    label.field-label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    input[type="text"], input[type="tel"], input[type="password"], input[type="number"], select, textarea {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--ink);
+      background: #FCFBF9;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--forest);
+      background: #fff;
+    }
+
+    /* CATEGORY PILLS */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 640px) { .cat-grid { grid-template-columns: repeat(2, 1fr); } }
+    .cat-chip {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #FCFBF9;
+      font-size: 13px;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .cat-chip:hover { border-color: var(--forest); }
+    .cat-chip.selected {
+      background: var(--forest-light);
+      border-color: var(--forest);
+      color: var(--forest);
+      font-weight: 600;
+    }
+
+    /* URGENCY PILLS */
+    .urgency-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .urg-btn {
+      padding: 7px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #FCFBF9;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--ink);
+    }
+    .urg-btn.selected[data-urg="Low"] { background: #E7F3EC; border-color: #1F6E43; color: #173F2D; }
+    .urg-btn.selected[data-urg="Medium"] { background: var(--gold); border-color: var(--gold); color: #fff; }
+    .urg-btn.selected[data-urg="High"] { background: #B42318; border-color: #B42318; color: #fff; }
+
+    /* STAR RATING (for Compliments) */
+    .star-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .star-btn {
+      font-size: 24px;
+      background: #FCFBF9;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px 12px;
+      cursor: pointer;
+      color: #C7C3B8;
+    }
+    .star-btn.active { color: #E09F1F; border-color: #E09F1F; background: #FFFBEB; }
+
+    /* TABLE NUMBER BUTTONS */
+    .table-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+    .tbl-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: #FCFBF9;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--ink);
+    }
+    .tbl-btn.selected {
+      background: var(--forest);
+      color: #fff;
+      border-color: var(--forest);
+    }
+
+    /* PHOTO UPLOAD */
+    .photo-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border: 1px dashed #B8B5AA;
+      border-radius: 10px;
+      background: #FAF9F5;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--ink);
+    }
+    .photo-preview {
+      margin-top: 10px;
+      max-width: 160px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      display: none;
+    }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 18px;
+      background: var(--forest);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 11px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .submit-btn:hover { background: var(--forest-dark); }
+    .submit-btn.compliment-mode { background: var(--gold); }
+
+    /* HOW IT WORKS FOOTER CARD */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 640px) { .steps-grid { grid-template-columns: 1fr; } }
+    .step-item { display: flex; gap: 10px; align-items: flex-start; }
+    .step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--forest);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-item h4 { font-size: 13px; font-weight: 700; }
+    .step-item p { font-size: 12px; color: var(--muted); }
+
+    /* TRACK STATUS / RECEIPT BOX */
+    .receipt-banner {
+      background: var(--green-bg);
+      border: 1px solid #A8D5BA;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 18px;
+      display: none;
+    }
+    .ref-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--forest);
+      background: #fff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid #B7DEC7;
+      display: inline-block;
+      margin: 6px 0;
+    }
+
+    /* DASHBOARD KPIs */
+    .kicker-top {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .dash-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .dash-header h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 28px;
+      line-height: 1.15;
+    }
+    .action-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-outline {
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--ink);
+      padding: 8px 13px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-outline:hover { border-color: var(--forest); background: var(--forest-light); }
+    .btn-primary {
+      background: var(--forest);
+      border: 1px solid var(--forest);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 720px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    .kpi-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+    .kpi-card span {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .kpi-card strong {
+      display: block;
+      font-family: 'Fraunces', serif;
+      font-size: 26px;
+      margin-top: 4px;
+      color: var(--ink);
+    }
+
+    /* FILTER BAR */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .status-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tab-pill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+    }
+    .tab-pill.active {
+      background: var(--forest);
+      color: #fff;
+      border-color: var(--forest);
+    }
+
+    /* TICKET LIST */
+    .ticket-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 15px 18px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.1s, border-color 0.15s;
+    }
+    .ticket-card:hover { border-color: var(--forest); }
+    .ticket-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+    .ticket-badges { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .ref-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--ink);
+    }
+    .badge {
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .badge.Resolved { background: var(--green-bg); color: var(--green-ink); }
+    .badge.Open { background: var(--red-bg); color: var(--red-ink); }
+    .badge.InProgress { background: var(--blue-bg); color: var(--blue-ink); }
+    .badge.Compliment { background: var(--gold-bg); color: #8A6116; }
+    .badge.High { background: #FDECEC; color: #B42318; }
+    .badge.Medium { background: #FEF3C7; color: #92400E; }
+    .badge.Low { background: #EEF2F6; color: #364152; }
+    .badge.table-tag { background: var(--forest); color: #fff; }
+    .ticket-msg { font-size: 14px; color: var(--ink); margin-bottom: 6px; }
+    .ticket-meta { font-size: 12px; color: var(--muted); }
+
+    /* CATEGORY BAR CHART */
+    .bar-row {
+      display: grid;
+      grid-template-columns: 150px 1fr 36px;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 9px;
+      font-size: 12.5px;
+    }
+    .bar-track {
+      background: #ECEAE2;
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      background: var(--forest);
+      height: 100%;
+      border-radius: 999px;
+    }
+
+    /* QR STUDIO */
+    .qr-box-wrap {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+      background: #FCFBF9;
+      margin: 14px 0;
+    }
+    #qrcode {
+      display: inline-block;
+      padding: 14px;
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .qr-url-pill {
+      margin-top: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      background: #F1EFE8;
+      padding: 7px 12px;
+      border-radius: 8px;
+      word-break: break-all;
+    }
+
+    /* MODAL (Login & Ticket Resolution) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(16, 28, 22, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-card {
+      background: #fff;
+      border-radius: 16px;
+      max-width: 520px;
+      width: 100%;
+      padding: 22px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    footer.site-footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: #F1EFE8;
+    }
+
+    /* PRINT STYLES (Management Report & QR Table Tents) */
+    @media print {
+      header.topbar, .no-print, footer.site-footer { display: none !important; }
+      body { background: #fff; }
+      main { margin: 0; max-width: 100%; padding: 0; }
+      .card, .ticket-card, .kpi-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAVIGATION -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand" onclick="switchView('guest')">
+        <div class="brand-logo" id="navLogo">GG</div>
+        <div class="brand-text">
+          <h1 id="navBrandName">Govind Garden</h1>
+          <span id="navBrandSub">GUEST CARE</span>
+        </div>
+      </div>
+
+      <nav class="nav-links" id="mainNav">
+        <button class="nav-btn active" data-view="guest" onclick="switchView('guest')">💬 Guest Portal</button>
+        <button class="nav-btn owner-only" data-view="dashboard" onclick="requireOwner('dashboard')" style="display:none;">📊 Dashboard</button>
+        <button class="nav-btn owner-only" data-view="qrstudio" onclick="requireOwner('qrstudio')" style="display:none;">📱 QR Studio</button>
+        <button class="nav-btn owner-only" data-view="settings" onclick="requireOwner('settings')" style="display:none;">⚙️ Settings</button>
+        <span id="cloudStatusBadge" style="font-size:11px; padding:4px 9px; border-radius:999px; background:rgba(255,255,255,0.12); color:#C7E8D6;">📱 Single-Device</span>
+        <button class="owner-pill" id="ownerAuthBtn" onclick="handleOwnerAuthBtn()">🔒 Owner Login</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================== 1. GUEST PORTAL VIEW ==================== -->
+    <section id="view-guest" class="view active">
+      <div class="hero-card">
+        <div class="hero-badge" id="heroLogo">GG</div>
+        <div class="hero-kicker" id="heroKicker">GOVIND GARDEN · GUEST CARE</div>
+        <h2 id="heroHeadline">Every guest voice, heard and resolved.</h2>
+        <p id="heroSubtext">Scanned the QR at your table? You are in the right place. Tell us what went wrong or share a compliment—the owner works on it personally.</p>
+        <ul class="hero-points">
+          <li>⚡ Tell us in under a minute — name, table, what happened</li>
+          <li>🔔 The owner is alerted instantly and tracks it to closure</li>
+          <li>🔖 Keep your reference number and follow up any time</li>
+        </ul>
+      </div>
+
+      <!-- Submission Receipt -->
+      <div class="receipt-banner" id="receiptBox">
+        <strong style="color:#137333; font-size:15px;">✅ Thank you! Your entry has been received by the Owner.</strong>
+        <p style="font-size:13px; margin-top:4px;">Save your Reference Number to check resolution status anytime:</p>
+        <div class="ref-code" id="receiptRef">GG-2026-0000</div>
+        <p style="font-size:12.5px; color:#2E4A3B;" id="receiptSummary"></p>
+      </div>
+
+      <!-- Complaint / Compliment Form -->
+      <div class="card">
+        <div class="type-toggle">
+          <button type="button" class="type-btn active complaint" id="btnTypeComplaint" onclick="setEntryType('Complaint')">⚠️ Raise a Complaint</button>
+          <button type="button" class="type-btn compliment" id="btnTypeCompliment" onclick="setEntryType('Compliment')">⭐ Share a Compliment</button>
+        </div>
+
+        <h3 class="section-title" id="formHeading">Raise a complaint</h3>
+        <p class="section-sub" id="formSubheading">It takes under a minute — the owner sees it instantly.</p>
+
+        <form id="guestForm" onsubmit="submitGuestEntry(event)">
+          <div class="form-grid-2">
+            <div>
+              <label class="field-label">Your name *</label>
+              <input type="text" id="guestName" placeholder="e.g. Ramesh K." required />
+            </div>
+            <div>
+              <label class="field-label">Phone number *</label>
+              <input type="tel" id="guestPhone" placeholder="+91 98xxx xxxxx" required />
+            </div>
+          </div>
+
+          <label class="field-label" id="catFieldLabel">What is it about? *</label>
+          <div class="cat-grid" id="categoryGrid"></div>
+
+          <!-- Urgency (Shown for Complaints) -->
+          <div id="urgencySection">
+            <label class="field-label">How urgent is it?</label>
+            <div class="urgency-row">
+              <button type="button" class="urg-btn" data-urg="Low" onclick="selectUrgency('Low')">Low</button>
+              <button type="button" class="urg-btn selected" data-urg="Medium" onclick="selectUrgency('Medium')">Medium</button>
+              <button type="button" class="urg-btn" data-urg="High" onclick="selectUrgency('High')">High</button>
+            </div>
+          </div>
+
+          <!-- Rating (Shown for Compliments) -->
+          <div id="ratingSection" style="display:none;">
+            <label class="field-label">Rate your experience</label>
+            <div class="star-row" id="starRow">
+              <button type="button" class="star-btn active" onclick="setRating(1)">★</button>
+              <button type="button" class="star-btn active" onclick="setRating(2)">★</button>
+              <button type="button" class="star-btn active" onclick="setRating(3)">★</button>
+              <button type="button" class="star-btn active" onclick="setRating(4)">★</button>
+              <button type="button" class="star-btn active" onclick="setRating(5)">★</button>
+            </div>
+          </div>
+
+          <label class="field-label">Table number</label>
+          <div class="table-pills" id="tablePills"></div>
+
+          <div class="form-grid-2">
+            <div>
+              <input type="text" id="customTable" placeholder="Or type e.g. Garden Pod 3" />
+            </div>
+            <div>
+              <input type="text" id="orderNo" placeholder="Order no. (for takeaway)" />
+            </div>
+          </div>
+
+          <label class="field-label" id="msgFieldLabel">Tell us what went wrong *</label>
+          <textarea id="guestMessage" rows="3" placeholder="Describe the issue in a line or two..." required></textarea>
+
+          <div style="margin-top:14px;">
+            <label class="field-label">Photo (optional)</label>
+            <label class="photo-box">
+              📷 Attach a photo
+              <input type="file" id="guestPhotoInput" accept="image/*" style="display:none;" onchange="handleGuestPhoto(event)" />
+            </label>
+            <img id="guestPhotoPreview" class="photo-preview" alt="Attached preview" />
+          </div>
+
+          <button type="submit" class="submit-btn" id="guestSubmitBtn">➤ Submit complaint</button>
+        </form>
+      </div>
+
+      <!-- Check Reference Status -->
+      <div class="card">
+        <h3 class="section-title" style="font-size:17px;">Track your reference number</h3>
+        <p class="section-sub" style="margin-bottom:12px;">Already submitted feedback? Enter your ID (e.g. GG-2026-2317) to check owner updates.</p>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="trackInput" placeholder="Enter Reference No. (e.g. GG-2026-2317)" />
+          <button type="button" class="btn-primary" onclick="trackTicket()">Check Status</button>
+        </div>
+        <div id="trackResult" style="margin-top:12px; font-size:13.5px;"></div>
+      </div>
+
+      <!-- 3-Step Guide -->
+      <div class="card">
+        <div class="steps-grid">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div>
+              <h4>Scan the table QR</h4>
+              <p>The QR opens this portal — no app to install.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div>
+              <h4>Describe the issue</h4>
+              <p>Category, urgency, or a compliment with photo.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div>
+              <h4>We make it right</h4>
+              <p>The owner resolves it and notes the fix against your reference.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top:12px;">
+        <button type="button" style="background:none; border:none; color:var(--muted); font-size:13px; text-decoration:underline; cursor:pointer;" onclick="handleOwnerAuthBtn()">
+          Restaurant owner? Sign in to the resolution dashboard
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== 2. OWNER DASHBOARD VIEW ==================== -->
+    <section id="view-dashboard" class="view">
+      <div class="dash-header">
+        <div>
+          <div class="kicker-top">RESOLUTION COMMAND CENTER</div>
+          <h2>Complaint & Feedback Dashboard</h2>
+        </div>
+        <div class="action-row no-print">
+          <button class="btn-outline" onclick="syncFromGoogleSheet(true)">🔄 Sync Live Data</button>
+          <button class="btn-outline" onclick="exportCSV()">📥 Export Excel (CSV)</button>
+          <button class="btn-primary" onclick="printManagementReport()">🖨️ Print Management Report</button>
+        </div>
+      </div>
+
+      <!-- Print Header (Visible when printing) -->
+      <div id="printReportHeader" style="display:none; margin-bottom:16px; border-bottom:2px solid #173F2D; padding-bottom:10px;">
+        <h2 id="printTitle">Govind Garden Restaurant — Management Guest Care Report</h2>
+        <p id="printMeta" style="font-size:12px; color:#444;"></p>
+      </div>
+
+      <!-- 5 KPI Tiles -->
+      <div class="kpi-grid">
+        <div class="kpi-card"><span>TOTAL ENTRIES</span><strong id="kpiTotal">0</strong></div>
+        <div class="kpi-card"><span>OPEN</span><strong id="kpiOpen" style="color:#B42318;">0</strong></div>
+        <div class="kpi-card"><span>IN PROGRESS</span><strong id="kpiProgress" style="color:#1967D2;">0</strong></div>
+        <div class="kpi-card"><span>RESOLVED</span><strong id="kpiResolved" style="color:#137333;">0</strong></div>
+        <div class="kpi-card"><span>COMPLIMENTS</span><strong id="kpiCompliments" style="color:#B8872B;">0</strong></div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar no-print">
+        <div class="status-tabs" id="statusFilterTabs">
+          <button class="tab-pill active" data-status="All" onclick="setStatusFilter('All')">All</button>
+          <button class="tab-pill" data-status="Open" onclick="setStatusFilter('Open')">Open</button>
+          <button class="tab-pill" data-status="In Progress" onclick="setStatusFilter('In Progress')">In Progress</button>
+          <button class="tab-pill" data-status="Resolved" onclick="setStatusFilter('Resolved')">Resolved</button>
+          <button class="tab-pill" data-status="Compliment" onclick="setStatusFilter('Compliment')">⭐ Compliments</button>
+        </div>
+        <select id="catFilterSelect" onchange="renderDashboard()" style="width:auto; min-width:170px;">
+          <option value="All">All categories</option>
+        </select>
+        <input type="text" id="dashSearch" placeholder="Search ref, guest, phone, table..." oninput="renderDashboard()" style="flex:1; min-width:200px;" />
+      </div>
+
+      <!-- Ticket Feed -->
+      <div id="ticketList"></div>
+
+      <!-- By Category Breakdown -->
+      <div class="card" style="margin-top:20px;">
+        <h3 class="section-title" style="font-size:18px; margin-bottom:14px;">By category</h3>
+        <div id="categoryBars"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 3. QR STUDIO VIEW ==================== -->
+    <section id="view-qrstudio" class="view">
+      <div class="kicker-top">TABLE-TENT STUDIO</div>
+      <h2 style="font-family:'Fraunces',serif; font-size:28px; margin-bottom:4px;">Print your complaint & feedback QR</h2>
+      <p class="section-sub">Put this QR on tables and standees. Guests scan it and reach the portal instantly — no app, no login.</p>
+
+      <div class="card">
+        <h3 class="section-title" style="font-size:17px;">Live QR preview</h3>
+        <p class="section-sub">Point the QR at a specific table to pre-fill the table number for guests.</p>
+
+        <label class="field-label">Table number (optional)</label>
+        <input type="text" id="qrTableInput" placeholder="e.g. 5 — leave empty for a general QR" oninput="generateQR()" />
+
+        <label class="field-label" style="margin-top:12px;">Hosted Website URL (Auto-detected when hosted online)</label>
+        <input type="text" id="qrBaseUrlInput" oninput="saveBaseUrlAndGenerateQR()" />
+
+        <div class="qr-box-wrap" id="printableQrCard">
+          <div style="font-family:'Fraunces',serif; font-weight:700; font-size:18px; color:var(--forest); margin-bottom:4px;" id="qrPosterTitle">Govind Garden Restaurant</div>
+          <div style="font-size:12px; color:var(--muted); margin-bottom:12px;" id="qrPosterSubtitle">Scan to share a Complaint or Compliment</div>
+          <div id="qrcode"></div>
+          <div class="qr-url-pill" id="qrFullUrlText"></div>
+        </div>
+      </div>
+
+      <div class="card no-print">
+        <h3 class="section-title" style="font-size:17px;">Download & print</h3>
+        <p class="section-sub">PNG for social/table stickers, or print a 4-per-page A4 sheet of table tents straight from your printer.</p>
+        <div style="display:grid; gap:10px;">
+          <button class="btn-primary" style="padding:12px;" onclick="downloadQRPng()">⬇️ Download High-Res PNG</button>
+          <button class="btn-outline" style="padding:12px;" onclick="printA4TableTents()">🖨️ Print A4 Sheet — 4 Table Tents</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 4. OWNER SETTINGS VIEW ==================== -->
+    <section id="view-settings" class="view">
+      <div class="kicker-top">OWNER CONTROL PANEL</div>
+      <h2 style="font-family:'Fraunces',serif; font-size:28px; margin-bottom:4px;">Restaurant Branding & Editable Settings</h2>
+      <p class="section-sub">Customize your restaurant details, logo, table count, categories, Google Sheet live sync, and owner password anytime.</p>
+
+      <div class="card">
+        <h3 class="section-title" style="font-size:18px;">1. Restaurant Identity & Logo</h3>
+        <p class="section-sub">Changes appear immediately across the Guest Portal, QR Posters, and Management Reports.</p>
+
+        <div class="form-grid-2">
+          <div>
+            <label class="field-label">Restaurant Name</label>
+            <input type="text" id="setRestName" />
+          </div>
+          <div>
+            <label class="field-label">Subtitle / Tagline</label>
+            <input type="text" id="setRestSub" />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div>
+            <label class="field-label">Owner / Manager Display Name</label>
+            <input type="text" id="setOwnerName" />
+          </div>
+          <div>
+            <label class="field-label">Restaurant Contact Phone</label>
+            <input type="text" id="setRestPhone" />
+          </div>
+        </div>
+
+        <label class="field-label">Restaurant Address (Printed on Management Reports)</label>
+        <input type="text" id="setRestAddress" style="margin-bottom:14px;" />
+
+        <label class="field-label">Hero Banner Headline</label>
+        <input type="text" id="setHeroHeadline" style="margin-bottom:14px;" />
+
+        <label class="field-label">Upload Restaurant Logo (PNG / JPG)</label>
+        <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:14px;">
+          <label class="photo-box">
+            🖼️ Choose Logo Image
+            <input type="file" accept="image/*" style="display:none;" onchange="handleLogoUpload(event)" />
+          </label>
+          <button type="button" class="btn-outline" onclick="removeLogo()">Remove Logo (Use Monogram)</button>
+        </div>
+
+        <button type="button" class="btn-primary" onclick="saveBrandingSettings()">💾 Save Branding & Details</button>
+      </div>
+
+      <div class="card">
+        <h3 class="section-title" style="font-size:18px;">2. Tables & Feedback Categories</h3>
+        <div class="form-grid-2">
+          <div>
+            <label class="field-label">Number of Quick-Select Tables (e.g. 12 or 20)</label>
+            <input type="number" id="setTableCount" min="1" max="60" />
+          </div>
+          <div>
+            <label class="field-label">Staff Members (Comma-separated for assignment)</label>
+            <input type="text" id="setStaffList" placeholder="Owner, Ram Supervisor, Rahul (Captain), Meera" />
+          </div>
+        </div>
+        <label class="field-label">Complaint & Feedback Categories (Comma-separated)</label>
+        <input type="text" id="setCategories" style="margin-bottom:14px;" />
+        <button type="button" class="btn-primary" onclick="saveOperationalSettings()">💾 Save Tables & Categories</button>
+      </div>
+
+      <!-- FREE GOOGLE SHEET BACKEND -->
+      <div class="card" style="border:1.5px solid #173F2D; background:#F9FBF9;">
+        <h3 class="section-title" style="font-size:18px;">3. Live Multi-Phone Sync (Free Google Sheet Backend)</h3>
+        <p class="section-sub">Connect a free Google Sheet once so every complaint/compliment submitted on any customer's phone appears instantly on your Owner Dashboard.</p>
+
+        <label class="field-label">Google Apps Script Web App URL</label>
+        <input type="text" id="setGoogleSheetUrl" placeholder="https://script.google.com/macros/s/...../exec" style="margin-bottom:10px;" />
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+          <button type="button" class="btn-primary" onclick="saveGoogleSheetUrl()">🔗 Connect & Sync Now</button>
+          <button type="button" class="btn-outline" onclick="copyAppsScriptCode()">📋 Copy Google Sheet Script</button>
+        </div>
+
+        <details style="font-size:12.5px; color:var(--muted); background:#fff; padding:12px; border-radius:10px; border:1px solid var(--border);">
+          <summary style="cursor:pointer; font-weight:700; color:var(--forest);">📖 2-Minute Setup Guide (Click to view)</summary>
+          <ol style="margin:10px 0 0 18px; line-height:1.7;">
+            <li>Open <strong>sheets.google.com</strong> and create a new blank sheet named <strong>Govind Garden Guest Care</strong>.</li>
+            <li>Click top menu <strong>Extensions → Apps Script</strong>.</li>
+            <li>Click <strong>"Copy Google Sheet Script"</strong> button above, delete any existing code in Apps Script, and paste it.</li>
+            <li>Click <strong>Deploy → New deployment</strong> → Select type <strong>Web app</strong>.</li>
+            <li>Set <em>Execute as:</em> <strong>Me</strong>, and <em>Who has access:</em> <strong>Anyone</strong> → Click <strong>Deploy</strong> & Authorize.</li>
+            <li>Copy the <strong>Web app URL</strong>, paste it in the box above, and click <strong>Connect & Sync Now</strong>.</li>
+          </ol>
+        </details>
+      </div>
+
+      <div class="card">
+        <h3 class="section-title" style="font-size:18px;">4. Owner Security & Lifetime Data Backup</h3>
+        <p class="section-sub">Only you can access the Dashboard, QR Studio, and Settings using your Owner PIN/Password.</p>
+        <div class="form-grid-2">
+          <div>
+            <label class="field-label">Owner Username</label>
+            <input type="text" id="setAdminUser" />
+          </div>
+          <div>
+            <label class="field-label">New Owner Password / PIN</label>
+            <input type="text" id="setAdminPass" />
+          </div>
+        </div>
+        <button type="button" class="btn-primary" onclick="saveSecuritySettings()">🔐 Update Owner Login</button>
+
+        <hr style="border:none; border-top:1px solid var(--border); margin:18px 0;" />
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="btn-outline" onclick="exportBackupJSON()">📦 Download Full JSON Backup</button>
+          <label class="btn-outline" style="cursor:pointer;">
+            📂 Restore JSON Backup
+            <input type="file" accept=".json" style="display:none;" onchange="importBackupJSON(event)" />
+          </label>
+          <button type="button" class="btn-outline" style="color:#B42318; border-color:#F5C2C0;" onclick="clearDemoData()">🗑️ Clear Sample Demo Tickets</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span id="footerText">Govind Garden Guest Care · every voice, resolved. © 2026</span>
+  </footer>
+
+  <!-- ==================== OWNER LOGIN MODAL ==================== -->
+  <div class="modal-backdrop" id="loginModal">
+    <div class="modal-card" style="max-width:400px;">
+      <h3 class="section-title">Owner Sign In</h3>
+      <p class="section-sub">Restricted to restaurant ownership. Enter your credentials to manage complaints & settings.</p>
+      <div style="margin-bottom:12px;">
+        <label class="field-label">Username</label>
+        <input type="text" id="loginUser" placeholder="owner" />
+      </div>
+      <div style="margin-bottom:14px;">
+        <label class="field-label">Password / PIN</label>
+        <input type="password" id="loginPass" placeholder="••••••" onkeydown="if(event.key==='Enter') submitOwnerLogin()" />
+      </div>
+      <p id="loginError" style="color:#B42318; font-size:12.5px; margin-bottom:10px; display:none;">Incorrect username or password.</p>
+      <div style="display:flex; gap:8px; justify-content:flex-end;">
+        <button type="button" class="btn-outline" onclick="closeModal('loginModal')">Cancel</button>
+        <button type="button" class="btn-primary" onclick="submitOwnerLogin()">Sign In</button>
+      </div>
+      <p style="font-size:11.5px; color:var(--muted); margin-top:12px;">Default login: <strong>owner</strong> / <strong>govind123</strong> (editable in Settings)</p>
+    </div>
+  </div>
+
+  <!-- ==================== TICKET RESOLUTION MODAL ==================== -->
+  <div class="modal-backdrop" id="ticketModal">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span class="ref-tag" id="modalRef" style="font-size:16px;">GG-2026-0000</span>
+        <button type="button" class="btn-outline" onclick="closeModal('ticketModal')">✕ Close</button>
+      </div>
+      <div id="modalDetails" style="font-size:13.5px; margin-bottom:14px;"></div>
+
+      <div class="form-grid-2">
+        <div>
+          <label class="field-label">Update Status</label>
+          <select id="modalStatus">
+            <option value="Open">Open</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Assign To</label>
+          <select id="modalAssignee"></select>
+        </div>
+      </div>
+
+      <label class="field-label">Owner Resolution Note (Visible when guest tracks reference)</label>
+      <textarea id="modalNote" rows="3" placeholder="e.g. Replaced dish immediately and offered complimentary dessert."></textarea>
+
+      <div style="display:flex; justify-content:space-between; gap:8px; margin-top:16px;">
+        <button type="button" class="btn-outline" style="color:#B42318;" onclick="deleteCurrentTicket()">Delete Entry</button>
+        <button type="button" class="btn-primary" onclick="saveTicketResolution()">✅ Save Resolution</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'govind_garden_care_v2';
+
+    const APPS_SCRIPT_TEMPLATE = `function doGet(e) {
+  var sheet = getOrCreateSheet();
+  var data = sheet.getDataRange().getValues();
+  var tickets = [];
+  for (var i = 1; i < data.length; i++) {
+    if (!data[i][0]) continue;
+    tickets.push({
+      id: String(data[i][0]),
+      type: String(data[i][1] || 'Complaint'),
+      name: String(data[i][2] || ''),
+      phone: String(data[i][3] || ''),
+      category: String(data[i][4] || 'Other'),
+      urgency: String(data[i][5] || 'Medium'),
+      rating: Number(data[i][6] || 0),
+      table: String(data[i][7] || ''),
+      orderNo: String(data[i][8] || ''),
+      message: String(data[i][9] || ''),
+      status: String(data[i][10] || 'Open'),
+      assignedTo: String(data[i][11] || 'Owner'),
+      resolutionNote: String(data[i][12] || ''),
+      photo: '',
+      createdAt: Number(data[i][13] || Date.now())
+    });
+  }
+  return ContentService.createTextOutput(JSON.stringify({ ok: true, tickets: tickets.reverse() }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  var sheet = getOrCreateSheet();
+  var payload = JSON.parse(e.postData.contents);
+  var action = payload.action || 'upsert';
+  var t = payload.ticket;
+  var data = sheet.getDataRange().getValues();
+
+  if (action === 'delete' && payload.id) {
+    for (var i = 1; i < data.length; i++) {
+      if (String(data[i][0]) === String(payload.id)) {
+        sheet.deleteRow(i + 1);
+        break;
+      }
+    }
+    return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  var rowValues = [
+    t.id, t.type, t.name, t.phone, t.category, t.urgency, t.rating || 0,
+    t.table || '', t.orderNo || '', t.message, t.status, t.assignedTo || 'Owner',
+    t.resolutionNote || '', t.createdAt || Date.now(), new Date(t.createdAt || Date.now()).toLocaleString()
+  ];
+
+  var updated = false;
+  for (var r = 1; r < data.length; r++) {
+    if (String(data[r][0]) === String(t.id)) {
+      sheet.getRange(r + 1, 1, 1, rowValues.length).setValues([rowValues]);
+      updated = true;
+      break;
+    }
+  }
+  if (!updated) {
+    sheet.appendRow(rowValues);
+  }
+  return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(ContentService.MimeType.JSON);
+}
+
+function getOrCreateSheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName('GuestCare');
+  if (!sheet) {
+    sheet = ss.insertSheet('GuestCare');
+    sheet.appendRow(['Ref ID','Type','Guest Name','Phone','Category','Urgency','Rating','Table','Order No','Message','Status','Assigned To','Resolution Note','Timestamp','Date Time']);
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}`;
+
+    const DEFAULT_STATE = {
+      settings: {
+        restName: 'Govind Garden',
+        restSub: 'GUEST CARE',
+        ownerName: 'Owner · Govind Garden',
+        restPhone: '+91 98000 00000',
+        restAddress: 'Govind Garden Family Restaurant & Lawn',
+        heroHeadline: 'Every guest voice, heard and resolved.',
+        logoDataUrl: '',
+        tableCount: 12,
+        categories: [
+          'Food Quality',
+          'Service Delay',
+          'Cleanliness',
+          'Billing / Payment',
+          'Ambiance / AC / Music',
+          'Staff Behavior',
+          'Other'
+        ],
+        staffList: ['Owner', 'Ram Supervisor', 'Rahul (Captain)', 'Meera (Floor Supervisor)', 'Maintenance'],
+        adminUser: 'owner',
+        adminPass: 'govind123',
+        baseUrl: '',
+        googleSheetUrl: ''
+      },
+      tickets: [
+        {
+          id: 'GG-2026-2317',
+          type: 'Complaint',
+          name: 'Ramesh Kulkarni',
+          phone: '+91 98220 11402',
+          category: 'Food Quality',
+          urgency: 'High',
+          rating: 0,
+          table: 'Table 4',
+          orderNo: '',
+          message: 'The paneer in the Makhani was cold in the centre and the gravy was overly sweet today. Usually excellent, but this plate was not up to the mark.',
+          status: 'Resolved',
+          assignedTo: 'Ram Supervisor',
+          resolutionNote: 'Apologized personally at Table 4, replaced with fresh hot Paneer Makhani, and waived the dish from the bill.',
+          photo: '',
+          createdAt: Date.now() - 86400000 * 1
+        },
+        {
+          id: 'GG-2026-2298',
+          type: 'Complaint',
+          name: 'Priya Deshmukh',
+          phone: '+91 97654 22190',
+          category: 'Service Delay',
+          urgency: 'Medium',
+          rating: 0,
+          table: 'Table 7',
+          orderNo: '',
+          message: 'Waited almost 40 minutes for the thali after ordering. The restaurant was not even full. Staff did apologise but the wait spoiled the lunch.',
+          status: 'Resolved',
+          assignedTo: 'Rahul (Captain)',
+          resolutionNote: 'Checked kitchen KOT delay and offered complimentary buttermilk & dessert to the table.',
+          photo: '',
+          createdAt: Date.now() - 86400000 * 2
+        },
+        {
+          id: 'GG-2026-2270',
+          type: 'Compliment',
+          name: 'Snehal Joshi',
+          phone: '+91 99230 77812',
+          category: 'Food Quality',
+          urgency: 'Low',
+          rating: 5,
+          table: 'Table 2',
+          orderNo: '',
+          message: 'Amazing garden seating ambiance and authentic taste! Captain Rahul took great care of our family dinner.',
+          status: 'Resolved',
+          assignedTo: 'Rahul (Captain)',
+          resolutionNote: 'Shared guest appreciation with the kitchen and service team during briefing.',
+          photo: '',
+          createdAt: Date.now() - 86400000 * 3
+        }
+      ]
+    };
+
+    let appState = loadState();
+    let isOwnerLoggedIn = sessionStorage.getItem('gg_owner_auth') === 'true';
+    let currentEntryType = 'Complaint';
+    let selectedCategory = '';
+    let selectedUrgency = 'Medium';
+    let selectedRating = 5;
+    let selectedTable = '';
+    let attachedPhotoData = '';
+    let activeStatusFilter = 'All';
+    let editingTicketId = null;
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_STATE));
+          return JSON.parse(JSON.stringify(DEFAULT_STATE));
+        }
+        const parsed = JSON.parse(raw);
+        return {
+          settings: { ...DEFAULT_STATE.settings, ...(parsed.settings || {}) },
+          tickets: Array.isArray(parsed.tickets) ? parsed.tickets : DEFAULT_STATE.tickets
+        };
+      } catch (e) {
+        return JSON.parse(JSON.stringify(DEFAULT_STATE));
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+    }
+
+    // INIT ON LOAD
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const sheetParam = params.get('sheet');
+      if (sheetParam && sheetParam.startsWith('https://script.google.com/')) {
+        appState.settings.googleSheetUrl = sheetParam;
+        saveState();
+      }
+      applyBranding();
+      buildGuestFormControls();
+      updateOwnerUI();
+      updateCloudBadge();
+      checkUrlParameters();
+      if (appState.settings.googleSheetUrl) {
+        syncFromGoogleSheet(false);
+      }
+    });
+
+    function checkUrlParameters() {
+      const params = new URLSearchParams(window.location.search);
+      const tbl = params.get('table');
+      if (tbl) {
+        const num = parseInt(tbl, 10);
+        if (!isNaN(num) && num >= 1 && num <= appState.settings.tableCount) {
+          selectTable(String(num));
+        } else {
+          document.getElementById('customTable').value = tbl;
+        }
+      }
+    }
+
+    function updateCloudBadge() {
+      const badge = document.getElementById('cloudStatusBadge');
+      if (!badge) return;
+      if (appState.settings.googleSheetUrl) {
+        badge.textContent = '☁️ Live Sync ON';
+        badge.style.background = '#286147';
+        badge.style.color = '#E6F4EC';
+      } else {
+        badge.textContent = '📱 Single-Device';
+        badge.style.background = 'rgba(255,255,255,0.12)';
+        badge.style.color = '#D2E5DC';
+      }
+    }
+
+    async function pushTicketToSheet(action, ticketOrId) {
+      const url = (appState.settings.googleSheetUrl || '').trim();
+      if (!url) return;
+      try {
+        const body = action === 'delete'
+          ? { action: 'delete', id: ticketOrId }
+          : { action: 'upsert', ticket: { ...ticketOrId, photo: '' } };
+        await fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(body)
+        });
+      } catch (err) {
+        console.warn('Cloud push error:', err);
+      }
+    }
+
+    async function syncFromGoogleSheet(showAlert) {
+      const url = (appState.settings.googleSheetUrl || '').trim();
+      if (!url) {
+        if (showAlert) alert('Pehle Settings mein Google Apps Script Web App URL connect karein.');
+        return;
+      }
+      try {
+        const res = await fetch(url);
+        const json = await res.json();
+        if (json && json.ok && Array.isArray(json.tickets)) {
+          const photoMap = {};
+          appState.tickets.forEach(t => { if (t.photo) photoMap[t.id] = t.photo; });
+          appState.tickets = json.tickets.map(t => ({ ...t, photo: photoMap[t.id] || '' }));
+          saveState();
+          if (document.getElementById('view-dashboard').classList.contains('active')) {
+            renderDashboard();
+          }
+          if (showAlert) alert(`Synced! ${appState.tickets.length} live entries loaded from Google Sheet.`);
+        }
+      } catch (err) {
+        if (showAlert) alert('Sync failed. Check that Google Apps Script Web App access is set to "Anyone".');
+      }
+    }
+
+    function copyAppsScriptCode() {
+      navigator.clipboard.writeText(APPS_SCRIPT_TEMPLATE).then(() => {
+        alert('Google Sheet Script copied! Ab Google Sheet → Extensions → Apps Script mein paste karein.');
+      }).catch(() => {
+        prompt('Copy this script manually:', APPS_SCRIPT_TEMPLATE);
+      });
+    }
+
+    function saveGoogleSheetUrl() {
+      const url = document.getElementById('setGoogleSheetUrl').value.trim();
+      appState.settings.googleSheetUrl = url;
+      saveState();
+      updateCloudBadge();
+      if (url) {
+        syncFromGoogleSheet(true);
+      } else {
+        alert('Google Sheet disconnected.');
+      }
+    }
+
+    // BRANDING & UI SYNC
+    function applyBranding() {
+      const s = appState.settings;
+      document.title = `${s.restName} · ${s.restSub}`;
+      document.getElementById('navBrandName').textContent = s.restName;
+      document.getElementById('navBrandSub').textContent = s.restSub;
+      document.getElementById('heroKicker').textContent = `${s.restName.toUpperCase()} · ${s.restSub.toUpperCase()}`;
+      document.getElementById('heroHeadline').textContent = s.heroHeadline;
+      document.getElementById('footerText').textContent = `${s.restName} ${s.restSub} · every voice, resolved. © ${new Date().getFullYear()}`;
+      document.getElementById('qrPosterTitle').textContent = `${s.restName} Restaurant`;
+
+      const initials = s.restName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'GG';
+      const navLogo = document.getElementById('navLogo');
+      const heroLogo = document.getElementById('heroLogo');
+      if (s.logoDataUrl) {
+        navLogo.innerHTML = `<img src="${s.logoDataUrl}" alt="Logo" />`;
+        heroLogo.innerHTML = `<img src="${s.logoDataUrl}" alt="Logo" />`;
+      } else {
+        navLogo.textContent = initials;
+        heroLogo.textContent = initials;
+      }
+    }
+
+    // GUEST FORM CONTROLS
+    function buildGuestFormControls() {
+      const cats = appState.settings.categories;
+      const grid = document.getElementById('categoryGrid');
+      grid.innerHTML = '';
+      selectedCategory = cats[0] || 'Other';
+
+      cats.forEach((cat, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cat-chip' + (idx === 0 ? ' selected' : '');
+        btn.textContent = cat;
+        btn.onclick = () => {
+          document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedCategory = cat;
+        };
+        grid.appendChild(btn);
+      });
+
+      const tableWrap = document.getElementById('tablePills');
+      tableWrap.innerHTML = '';
+      for (let i = 1; i <= appState.settings.tableCount; i++) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'tbl-btn';
+        b.textContent = i;
+        b.dataset.tbl = String(i);
+        b.onclick = () => selectTable(String(i));
+        tableWrap.appendChild(b);
+      }
+    }
+
+    function selectTable(numStr) {
+      selectedTable = (selectedTable === numStr) ? '' : numStr;
+      document.querySelectorAll('.tbl-btn').forEach(b => {
+        b.classList.toggle('selected', b.dataset.tbl === selectedTable);
+      });
+      if (selectedTable) document.getElementById('customTable').value = '';
+    }
+
+    function setEntryType(type) {
+      currentEntryType = type;
+      const isComp = type === 'Complaint';
+      document.getElementById('btnTypeComplaint').classList.toggle('active', isComp);
+      document.getElementById('btnTypeCompliment').classList.toggle('active', !isComp);
+
+      document.getElementById('formHeading').textContent = isComp ? 'Raise a complaint' : 'Share a compliment';
+      document.getElementById('formSubheading').textContent = isComp
+        ? 'It takes under a minute — the owner sees it instantly.'
+        : 'Loved the food or service? Tell us who made your visit special!';
+      document.getElementById('catFieldLabel').textContent = isComp ? 'What is it about? *' : 'What did you love most? *';
+      document.getElementById('urgencySection').style.display = isComp ? 'block' : 'none';
+      document.getElementById('ratingSection').style.display = isComp ? 'none' : 'block';
+      document.getElementById('msgFieldLabel').textContent = isComp ? 'Tell us what went wrong *' : 'Write your compliment *';
+      document.getElementById('guestMessage').placeholder = isComp
+        ? 'Describe the issue in a line or two...'
+        : 'Share what you enjoyed about our food, staff, or ambiance...';
+
+      const subBtn = document.getElementById('guestSubmitBtn');
+      subBtn.textContent = isComp ? '➤ Submit complaint' : '⭐ Submit compliment';
+      subBtn.classList.toggle('compliment-mode', !isComp);
+    }
+
+    function selectUrgency(urg) {
+      selectedUrgency = urg;
+      document.querySelectorAll('.urg-btn').forEach(b => {
+        b.classList.toggle('selected', b.dataset.urg === urg);
+      });
+    }
+
+    function setRating(stars) {
+      selectedRating = stars;
+      document.querySelectorAll('.star-btn').forEach((b, idx) => {
+        b.classList.toggle('active', idx < stars);
+      });
+    }
+
+    function handleGuestPhoto(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const maxW = 600;
+          const scale = Math.min(1, maxW / img.width);
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+          attachedPhotoData = canvas.toDataURL('image/jpeg', 0.72);
+          const prev = document.getElementById('guestPhotoPreview');
+          prev.src = attachedPhotoData;
+          prev.style.display = 'block';
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function submitGuestEntry(e) {
+      e.preventDefault();
+      const name = document.getElementById('guestName').value.trim();
+      const phone = document.getElementById('guestPhone').value.trim();
+      const customTbl = document.getElementById('customTable').value.trim();
+      const orderNo = document.getElementById('orderNo').value.trim();
+      const message = document.getElementById('guestMessage').value.trim();
+
+      const initials = appState.settings.restName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'GG';
+      const randNum = Math.floor(1000 + Math.random() * 9000);
+      const refId = `${initials}-${new Date().getFullYear()}-${randNum}`;
+
+      const finalTable = customTbl ? customTbl : (selectedTable ? `Table ${selectedTable}` : '');
+
+      const entry = {
+        id: refId,
+        type: currentEntryType,
+        name,
+        phone,
+        category: selectedCategory,
+        urgency: currentEntryType === 'Complaint' ? selectedUrgency : 'Low',
+        rating: currentEntryType === 'Compliment' ? selectedRating : 0,
+        table: finalTable,
+        orderNo: orderNo ? `Order ${orderNo}` : '',
+        message,
+        status: currentEntryType === 'Compliment' ? 'Resolved' : 'Open',
+        assignedTo: 'Owner',
+        resolutionNote: currentEntryType === 'Compliment' ? 'Compliment received and logged for team appreciation.' : '',
+        photo: attachedPhotoData,
+        createdAt: Date.now()
+      };
+
+      appState.tickets.unshift(entry);
+      saveState();
+      pushTicketToSheet('upsert', entry);
+
+      document.getElementById('receiptRef').textContent = refId;
+      document.getElementById('receiptSummary').textContent =
+        `${entry.type} (${entry.category}) · ${finalTable || entry.orderNo || 'General'} · Registered for ${name}`;
+      const box = document.getElementById('receiptBox');
+      box.style.display = 'block';
+      box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      document.getElementById('guestForm').reset();
+      selectedTable = '';
+      attachedPhotoData = '';
+      document.getElementById('guestPhotoPreview').style.display = 'none';
+      document.querySelectorAll('.tbl-btn').forEach(b => b.classList.remove('selected'));
+      selectUrgency('Medium');
+    }
+
+    async function trackTicket() {
+      const q = document.getElementById('trackInput').value.trim().toUpperCase();
+      const out = document.getElementById('trackResult');
+      if (!q) {
+        out.innerHTML = '<span style="color:#B42318;">Please enter your reference number.</span>';
+        return;
+      }
+      if (appState.settings.googleSheetUrl) {
+        out.innerHTML = '<span style="color:var(--muted);">Checking live status...</span>';
+        await syncFromGoogleSheet(false);
+      }
+      const found = appState.tickets.find(t => t.id.toUpperCase() === q);
+      if (!found) {
+        out.innerHTML = '<span style="color:#B42318;">No entry found with that reference ID.</span>';
+        return;
+      }
+      out.innerHTML = `
+        <div style="background:#FAF9F5; border:1px solid var(--border); padding:12px; border-radius:10px;">
+          <strong>${found.id}</strong> · <span class="badge ${found.status.replace(' ', '')}">${found.status}</span>
+          <p style="margin-top:6px;">"${escapeHtml(found.message)}"</p>
+          <p style="margin-top:6px; color:#137333; font-weight:600;">
+            Owner Update: ${escapeHtml(found.resolutionNote || 'Received by Owner. Action in progress.')}
+          </p>
+        </div>
+      `;
+    }
+
+    // NAVIGATION & OWNER AUTH
+    function switchView(viewName) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(`view-${viewName}`).classList.add('active');
+
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.view === viewName);
+      });
+
+      if (viewName === 'dashboard') {
+        renderDashboard();
+        if (appState.settings.googleSheetUrl) syncFromGoogleSheet(false);
+      }
+      if (viewName === 'qrstudio') initQRStudio();
+      if (viewName === 'settings') loadSettingsForm();
+    }
+
+    function requireOwner(targetView) {
+      if (!isOwnerLoggedIn) {
+        document.getElementById('loginModal').classList.add('open');
+        return;
+      }
+      switchView(targetView);
+    }
+
+    function handleOwnerAuthBtn() {
+      if (isOwnerLoggedIn) {
+        isOwnerLoggedIn = false;
+        sessionStorage.removeItem('gg_owner_auth');
+        updateOwnerUI();
+        switchView('guest');
+      } else {
+        document.getElementById('loginError').style.display = 'none';
+        document.getElementById('loginModal').classList.add('open');
+      }
+    }
+
+    function submitOwnerLogin() {
+      const u = document.getElementById('loginUser').value.trim();
+      const p = document.getElementById('loginPass').value;
+      if (u === appState.settings.adminUser && p === appState.settings.adminPass) {
+        isOwnerLoggedIn = true;
+        sessionStorage.setItem('gg_owner_auth', 'true');
+        closeModal('loginModal');
+        updateOwnerUI();
+        switchView('dashboard');
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+      }
+    }
+
+    function updateOwnerUI() {
+      document.querySelectorAll('.owner-only').forEach(el => {
+        el.style.display = isOwnerLoggedIn ? 'inline-flex' : 'none';
+      });
+      const authBtn = document.getElementById('ownerAuthBtn');
+      authBtn.textContent = isOwnerLoggedIn ? '🔓 Logout Owner' : '🔒 Owner Login';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    // DASHBOARD RENDERING
+    function setStatusFilter(st) {
+      activeStatusFilter = st;
+      document.querySelectorAll('#statusFilterTabs .tab-pill').forEach(p => {
+        p.classList.toggle('active', p.dataset.status === st);
+      });
+      renderDashboard();
+    }
+
+    function getFilteredTickets() {
+      const catFilter = document.getElementById('catFilterSelect').value;
+      const search = document.getElementById('dashSearch').value.trim().toLowerCase();
+
+      return appState.tickets.filter(t => {
+        if (activeStatusFilter === 'Compliment') {
+          if (t.type !== 'Compliment') return false;
+        } else if (activeStatusFilter !== 'All') {
+          if (t.status !== activeStatusFilter) return false;
+        }
+        if (catFilter !== 'All' && t.category !== catFilter) return false;
+        if (search) {
+          const hay = `${t.id} ${t.name} ${t.phone} ${t.table} ${t.orderNo} ${t.message} ${t.category}`.toLowerCase();
+          if (!hay.includes(search)) return false;
+        }
+        return true;
+      });
+    }
+
+    function renderDashboard() {
+      const all = appState.tickets;
+      document.getElementById('kpiTotal').textContent = all.length;
+      document.getElementById('kpiOpen').textContent = all.filter(t => t.status === 'Open').length;
+      document.getElementById('kpiProgress').textContent = all.filter(t => t.status === 'In Progress').length;
+      document.getElementById('kpiResolved').textContent = all.filter(t => t.status === 'Resolved' && t.type !== 'Compliment').length;
+      document.getElementById('kpiCompliments').textContent = all.filter(t => t.type === 'Compliment').length;
+
+      const sel = document.getElementById('catFilterSelect');
+      const prevVal = sel.value;
+      sel.innerHTML = '<option value="All">All categories</option>';
+      appState.settings.categories.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        sel.appendChild(opt);
+      });
+      sel.value = prevVal || 'All';
+
+      const list = document.getElementById('ticketList');
+      const filtered = getFilteredTickets();
+      if (!filtered.length) {
+        list.innerHTML = '<div class="card" style="text-align:center; color:var(--muted);">No matching entries found.</div>';
+      } else {
+        list.innerHTML = filtered.map(t => {
+          const statusClass = t.status.replace(' ', '');
+          const typeBadge = t.type === 'Compliment'
+            ? `<span class="badge Compliment">⭐ Compliment (${t.rating || 5}★)</span>`
+            : `<span class="badge ${t.urgency}">${t.urgency} Priority</span>`;
+          const locBadge = t.table
+            ? `<span class="badge table-tag">${t.table}</span>`
+            : (t.orderNo ? `<span class="badge Low">${t.orderNo}</span>` : '');
+
+          return `
+            <div class="ticket-card" onclick="openTicketModal('${t.id}')">
+              <div class="ticket-top">
+                <div class="ticket-badges">
+                  <span class="ref-tag">${t.id}</span>
+                  <span class="badge ${statusClass}">${t.status}</span>
+                  ${typeBadge}
+                  ${locBadge}
+                </div>
+                <span style="font-size:12px; color:var(--muted);">${timeAgo(t.createdAt)}</span>
+              </div>
+              <div class="ticket-msg">${escapeHtml(t.message)}</div>
+              <div class="ticket-meta">
+                <strong>${escapeHtml(t.name)}</strong> (${escapeHtml(t.phone)}) · ${escapeHtml(t.category)} · assigned to ${escapeHtml(t.assignedTo || 'Owner')}
+                ${t.resolutionNote ? `<div style="color:#137333; margin-top:4px;">↳ Fix: ${escapeHtml(t.resolutionNote)}</div>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const barsWrap = document.getElementById('categoryBars');
+      const cats = appState.settings.categories;
+      const counts = cats.map(c => all.filter(t => t.category === c).length);
+      const maxCount = Math.max(1, ...counts);
+      barsWrap.innerHTML = cats.map((c, idx) => {
+        const pct = Math.round((counts[idx] / maxCount) * 100);
+        return `
+          <div class="bar-row">
+            <div style="text-align:right; color:var(--muted); font-weight:500;">${escapeHtml(c)}</div>
+            <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+            <div style="font-weight:700;">${counts[idx]}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openTicketModal(id) {
+      const t = appState.tickets.find(x => x.id === id);
+      if (!t) return;
+      editingTicketId = id;
+      document.getElementById('modalRef').textContent = `${t.id} (${t.type})`;
+      document.getElementById('modalDetails').innerHTML = `
+        <p><strong>Guest:</strong> ${escapeHtml(t.name)} · <strong>Phone:</strong> ${escapeHtml(t.phone)}</p>
+        <p><strong>Location:</strong> ${escapeHtml(t.table || t.orderNo || 'General')} · <strong>Category:</strong> ${escapeHtml(t.category)}</p>
+        <p style="background:#FAF9F5; padding:10px; border-radius:8px; border:1px solid var(--border); margin-top:8px;">${escapeHtml(t.message)}</p>
+        ${t.photo ? `<img src="${t.photo}" style="max-width:100%; max-height:220px; border-radius:10px; margin-top:8px;" />` : ''}
+      `;
+      document.getElementById('modalStatus').value = t.status;
+
+      const assignSel = document.getElementById('modalAssignee');
+      assignSel.innerHTML = appState.settings.staffList.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
+      assignSel.value = t.assignedTo || 'Owner';
+
+      document.getElementById('modalNote').value = t.resolutionNote || '';
+      document.getElementById('ticketModal').classList.add('open');
+    }
+
+    function saveTicketResolution() {
+      const t = appState.tickets.find(x => x.id === editingTicketId);
+      if (!t) return;
+      t.status = document.getElementById('modalStatus').value;
+      t.assignedTo = document.getElementById('modalAssignee').value;
+      t.resolutionNote = document.getElementById('modalNote').value.trim();
+      saveState();
+      pushTicketToSheet('upsert', t);
+      closeModal('ticketModal');
+      renderDashboard();
+    }
+
+    function deleteCurrentTicket() {
+      if (!confirm('Delete this entry permanently?')) return;
+      const delId = editingTicketId;
+      appState.tickets = appState.tickets.filter(x => x.id !== delId);
+      saveState();
+      pushTicketToSheet('delete', delId);
+      closeModal('ticketModal');
+      renderDashboard();
+    }
+
+    // MANAGEMENT PRINT REPORT & CSV EXPORT
+    function printManagementReport() {
+      const s = appState.settings;
+      const filtered = getFilteredTickets();
+      document.getElementById('printTitle').textContent = `${s.restName} — Management Guest Care Report`;
+      document.getElementById('printMeta').textContent =
+        `${s.restAddress} | Phone: ${s.restPhone} | Printed on: ${new Date().toLocaleString()} | Filter: ${activeStatusFilter} (${filtered.length} entries)`;
+      document.getElementById('printReportHeader').style.display = 'block';
+      window.print();
+      setTimeout(() => { document.getElementById('printReportHeader').style.display = 'none'; }, 500);
+    }
+
+    function exportCSV() {
+      const rows = [['Ref ID', 'Type', 'Status', 'Priority', 'Rating', 'Guest Name', 'Phone', 'Table/Order', 'Category', 'Message', 'Assigned To', 'Owner Resolution Note', 'Date']];
+      getFilteredTickets().forEach(t => {
+        rows.push([
+          t.id, t.type, t.status, t.urgency, t.rating || '',
+          t.name, t.phone, t.table || t.orderNo || 'General', t.category,
+          t.message.replace(/"/g, '""'), t.assignedTo, (t.resolutionNote || '').replace(/"/g, '""'),
+          new Date(t.createdAt).toLocaleString()
+        ]);
+      });
+      const csv = rows.map(r => r.map(v => `"${v}"`).join(',')).join('
+');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${appState.settings.restName.replace(/\s+/g, '_')}_GuestCare_Report.csv`;
+      a.click();
+    }
+
+    // QR STUDIO
+    function initQRStudio() {
+      const baseInput = document.getElementById('qrBaseUrlInput');
+      const cur = window.location.href.split('?')[0];
+      if (!appState.settings.baseUrl || appState.settings.baseUrl.startsWith('file:') || appState.settings.baseUrl.startsWith('blob:')) {
+        appState.settings.baseUrl = cur.startsWith('http') ? cur : 'https://govind-garden.tiiny.site';
+        saveState();
+      }
+      baseInput.value = appState.settings.baseUrl;
+      generateQR();
+    }
+
+    function saveBaseUrlAndGenerateQR() {
+      appState.settings.baseUrl = document.getElementById('qrBaseUrlInput').value.trim();
+      saveState();
+      generateQR();
+    }
+
+    function generateQR() {
+      let base = (appState.settings.baseUrl || '').trim();
+      const locHref = window.location.href.split('?')[0];
+      if (!base || base.startsWith('blob:') || base.startsWith('file:')) {
+        base = locHref.startsWith('http') ? locHref : 'https://govind-garden.tiiny.site';
+      }
+      const tbl = document.getElementById('qrTableInput').value.trim();
+      const sheetUrl = (appState.settings.googleSheetUrl || '').trim();
+      const qp = [];
+      if (tbl) qp.push(`table=${encodeURIComponent(tbl)}`);
+      if (sheetUrl) qp.push(`sheet=${encodeURIComponent(sheetUrl)}`);
+      const fullUrl = qp.length ? `${base}${base.includes('?') ? '&' : '?'}${qp.join('&')}` : base;
+
+      document.getElementById('qrFullUrlText').textContent = fullUrl;
+      document.getElementById('qrPosterSubtitle').textContent = tbl
+        ? `Table ${tbl} · Scan to share a Complaint or Compliment`
+        : 'Scan to share a Complaint or Compliment';
+
+      const qrContainer = document.getElementById('qrcode');
+      qrContainer.innerHTML = '';
+
+      if (typeof QRCode !== 'undefined') {
+        try {
+          new QRCode(qrContainer, {
+            text: fullUrl,
+            width: 240,
+            height: 240,
+            colorDark: '#173F2D',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.M
+          });
+        } catch (e) {
+          qrContainer.innerHTML = `<div style="padding:16px;font-size:12px;color:#B42318;">URL too long for QR. Use a shorter hosted URL.</div>`;
+        }
+      } else {
+        const img = document.createElement('img');
+        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&color=17-3F-2D&data=${encodeURIComponent(fullUrl)}`;
+        img.alt = 'QR Code';
+        img.style.width = '240px';
+        img.style.height = '240px';
+        qrContainer.appendChild(img);
+      }
+    }
+
+    function downloadQRPng() {
+      const canvas = document.querySelector('#qrcode canvas');
+      if (!canvas) return;
+      const tbl = document.getElementById('qrTableInput').value.trim();
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL('image/png');
+      a.download = `${appState.settings.restName.replace(/\s+/g, '_')}_QR${tbl ? '_Table_' + tbl : ''}.png`;
+      a.click();
+    }
+
+    function printA4TableTents() {
+      const qrCanvas = document.querySelector('#qrcode canvas');
+      if (!qrCanvas) return;
+      const qrImg = qrCanvas.toDataURL('image/png');
+      const s = appState.settings;
+      const tbl = document.getElementById('qrTableInput').value.trim();
+      const win = window.open('', '_blank');
+      const cardHtml = `
+        <div style="border:2px dashed #173F2D; border-radius:14px; padding:20px; text-align:center; font-family:sans-serif;">
+          <div style="font-size:11px; letter-spacing:2px; color:#173F2D; font-weight:700;">${s.restSub}</div>
+          <h2 style="margin:4px 0; color:#173F2D;">${s.restName}</h2>
+          <p style="font-size:13px; color:#555; margin-bottom:12px;">${tbl ? 'Table ' + tbl + ' · ' : ''}Scan to share Feedback or Complaint</p>
+          <img src="${qrImg}" style="width:170px; height:170px;" />
+          <p style="font-size:11px; color:#666; margin-top:10px;">Every guest voice, heard and resolved.</p>
+        </div>
+      `;
+      win.document.write(`
+        <html><head><title>Print Table Tents</title></head>
+        <body style="padding:20px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+            ${cardHtml}${cardHtml}${cardHtml}${cardHtml}
+          </div>
+          <script>window.onload = () => { window.print(); };<\/script>
+        </body></html>
+      `);
+      win.document.close();
+    }
+
+    // SETTINGS MANAGEMENT
+    function loadSettingsForm() {
+      const s = appState.settings;
+      document.getElementById('setRestName').value = s.restName;
+      document.getElementById('setRestSub').value = s.restSub;
+      document.getElementById('setOwnerName').value = s.ownerName;
+      document.getElementById('setRestPhone').value = s.restPhone;
+      document.getElementById('setRestAddress').value = s.restAddress;
+      document.getElementById('setHeroHeadline').value = s.heroHeadline;
+      document.getElementById('setTableCount').value = s.tableCount;
+      document.getElementById('setStaffList').value = s.staffList.join(', ');
+      document.getElementById('setCategories').value = s.categories.join(', ');
+      document.getElementById('setGoogleSheetUrl').value = s.googleSheetUrl || '';
+      document.getElementById('setAdminUser').value = s.adminUser;
+      document.getElementById('setAdminPass').value = s.adminPass;
+    }
+
+    function handleLogoUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        appState.settings.logoDataUrl = ev.target.result;
+        saveState();
+        applyBranding();
+        alert('Restaurant logo updated!');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeLogo() {
+      appState.settings.logoDataUrl = '';
+      saveState();
+      applyBranding();
+    }
+
+    function saveBrandingSettings() {
+      const s = appState.settings;
+      s.restName = document.getElementById('setRestName').value.trim() || 'Govind Garden';
+      s.restSub = document.getElementById('setRestSub').value.trim() || 'GUEST CARE';
+      s.ownerName = document.getElementById('setOwnerName').value.trim();
+      s.restPhone = document.getElementById('setRestPhone').value.trim();
+      s.restAddress = document.getElementById('setRestAddress').value.trim();
+      s.heroHeadline = document.getElementById('setHeroHeadline').value.trim();
+      saveState();
+      applyBranding();
+      alert('Branding & restaurant details saved!');
+    }
+
+    function saveOperationalSettings() {
+      const s = appState.settings;
+      s.tableCount = Math.max(1, Math.min(60, parseInt(document.getElementById('setTableCount').value, 10) || 12));
+      s.staffList = document.getElementById('setStaffList').value.split(',').map(x => x.trim()).filter(Boolean);
+      s.categories = document.getElementById('setCategories').value.split(',').map(x => x.trim()).filter(Boolean);
+      saveState();
+      buildGuestFormControls();
+      alert('Tables, staff, and categories updated!');
+    }
+
+    function saveSecuritySettings() {
+      const u = document.getElementById('setAdminUser').value.trim();
+      const p = document.getElementById('setAdminPass').value.trim();
+      if (!u || !p) { alert('Username and Password cannot be empty.'); return; }
+      appState.settings.adminUser = u;
+      appState.settings.adminPass = p;
+      saveState();
+      alert('Owner login credentials updated!');
+    }
+
+    function exportBackupJSON() {
+      const blob = new Blob([JSON.stringify(appState, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `Govind_Garden_Full_Backup_${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+    }
+
+    function importBackupJSON(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          if (imported.settings && imported.tickets) {
+            appState = imported;
+            saveState();
+            applyBranding();
+            buildGuestFormControls();
+            loadSettingsForm();
+            alert('Backup restored successfully!');
+          }
+        } catch (err) {
+          alert('Invalid backup file.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function clearDemoData() {
+      if (!confirm('Remove all current entries and start with a clean register?')) return;
+      appState.tickets = [];
+      saveState();
+      alert('All entries cleared!');
+    }
+
+    function timeAgo(ts) {
+      const diff = Math.floor((Date.now() - ts) / 1000);
+      if (diff < 60) return 'Just now';
+      if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+      if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+      return `${Math.floor(diff / 86400)}d ago`;
+    }
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+    }
+  </script>
+</body>
+</html>
